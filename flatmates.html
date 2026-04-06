@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlatMates Cloud Tracker</title>
+    <style>
+        /* Sari Styling pehle wali hi hai */
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+        *{box-sizing:border-box;margin:0;padding:0}
+        :root{
+        --ali:#e8533a;--ali-light:#fde8e4;--ali-dark:#8a2d1c;
+        --mazhar:#0f9e75;--mazhar-light:#d8f4ec;--mazhar-dark:#065040;
+        --numl:#6c47d9;--numl-light:#ece7fd;--numl-dark:#3a2480;
+        --air:#1a7fd4;--air-light:#d9edfa;--air-dark:#0c3f6e;
+        --bg:#f7f5f0;--surface:#ffffff;--text:#1a1a1a;--text2:#666;--border:#e8e3dc;
+        }
+        body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+        .app{max-width:480px;margin:0 auto;padding:0 0 80px}
+        .header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px 0;position:sticky;top:0;z-index:100}
+        .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+        .app-title{font-size:20px;font-weight:700;letter-spacing:-0.5px}
+        .app-title span{color:var(--ali)}
+        .sync-badge{font-size:10px;background:#d8f4ec;color:#065040;padding:3px 8px;border-radius:20px;font-family:'Space Mono',monospace;display:flex;align-items:center;gap:4px}
+        .sync-dot{width:6px;height:6px;border-radius:50%;background:#0f9e75;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+        .tabs{display:flex;gap:0}
+        .tab{flex:1;padding:10px 0;text-align:center;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .2s}
+        .tab.active{color:var(--ali);border-bottom-color:var(--ali)}
+        .content{padding:16px 20px}
+        .bubbles-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+        .bubble{border-radius:20px;padding:16px;position:relative;overflow:hidden;cursor:pointer;transition:transform .15s}
+        .bubble:active{transform:scale(0.97)}
+        .bubble.ali{background:var(--ali-light)}
+        .bubble.mazhar{background:var(--mazhar-light)}
+        .bubble.numl{background:var(--numl-light)}
+        .bubble.air{background:var(--air-light)}
+        .bubble-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;margin-bottom:8px;color:#fff}
+        .ali .bubble-avatar{background:var(--ali)}
+        .mazhar .bubble-avatar{background:var(--mazhar)}
+        .numl .bubble-avatar{background:var(--numl)}
+        .air .bubble-avatar{background:var(--air)}
+        .bubble-name{font-size:13px;font-weight:600;margin-bottom:4px}
+        .ali .bubble-name{color:var(--ali-dark)}
+        .mazhar .bubble-name{color:var(--mazhar-dark)}
+        .numl .bubble-name{color:var(--numl-dark)}
+        .air .bubble-name{color:var(--air-dark)}
+        .bubble-balance{font-size:20px;font-weight:700;font-family:'Space Mono',monospace}
+        .bubble-balance.pos{color:#0a7a50}
+        .bubble-balance.neg{color:#c0392b}
+        .bubble-balance.zero{color:#999}
+        .bubble-label{font-size:10px;font-weight:500;margin-top:2px}
+        .ali .bubble-label{color:var(--ali)}
+        .mazhar .bubble-label{color:var(--mazhar)}
+        .numl .bubble-label{color:var(--numl)}
+        .air .bubble-label{color:var(--air)}
+        .section-title{font-size:13px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+        .form-card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px}
+        .form-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;display:block}
+        .form-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border .2s}
+        .form-input:focus{border-color:#999}
+        .form-select{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);outline:none;appearance:none;cursor:pointer}
+        .people-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .person-chip{border:2px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;transition:all .15s;background:var(--surface);text-align:center}
+        .person-chip.selected.ali{border-color:var(--ali);background:var(--ali-light)}
+        .person-chip.selected.mazhar{border-color:var(--mazhar);background:var(--mazhar-light)}
+        .person-chip.selected.numl{border-color:var(--numl);background:var(--numl-light)}
+        .person-chip.selected.air{border-color:var(--air);background:var(--air-light)}
+        .person-chip-name{font-size:13px;font-weight:600}
+        .person-chip-amt{font-size:11px;color:var(--text2);margin-top:2px}
+        .payer-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+        .payer-tag{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+        .payer-tag.ali{background:var(--ali)}
+        .payer-tag.mazhar{background:var(--mazhar)}
+        .payer-tag.numl{background:var(--numl)}
+        .payer-tag.air{background:var(--air)}
+        .payer-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);outline:none}
+        .add-btn{width:100%;padding:14px;border:none;border-radius:12px;background:var(--text);color:#fff;font-size:15px;font-weight:600;font-family:'Sora',sans-serif;cursor:pointer;margin-top:8px;transition:opacity .15s}
+        .expense-item{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
+        .exp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+        .exp-desc{font-size:14px;font-weight:600}
+        .exp-amount{font-size:16px;font-weight:700;font-family:'Space Mono',monospace}
+        .exp-meta{font-size:11px;color:var(--text2);margin-bottom:8px}
+        .cat-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;margin-right:6px}
+        .cat-food{background:#fde8e4;color:#8a2d1c}
+        .cat-flat{background:#d9edfa;color:#0c3f6e}
+        .cat-water{background:#d8f4ec;color:#065040}
+        .cat-other{background:#f0ece8;color:#5a4a3a}
+        .cat-custom{background:#ece7fd;color:#3a2480}
+        .exp-splits{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+        .split-tag{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500}
+        .split-tag.ali{background:var(--ali-light);color:var(--ali-dark)}
+        .split-tag.mazhar{background:var(--mazhar-light);color:var(--mazhar-dark)}
+        .split-tag.numl{background:var(--numl-light);color:var(--numl-dark)}
+        .split-tag.air{background:var(--air-light);color:var(--air-dark)}
+        .delete-btn{background:none;border:none;cursor:pointer;color:#ccc;font-size:16px;padding:2px}
+        .settle-section{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px}
+        .settle-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+        .settle-amount{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#c0392b}
+        .danger-btn{width:100%;padding:12px;border:2px solid #f0c0bb;border-radius:12px;background:none;color:#c0392b;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px}
+        .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;z-index:999;pointer-events:none}
+        .toast.show{opacity:1}
+        .summary-total{background:var(--text);color:#fff;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+        .summary-total-value{font-family:'Space Mono',monospace;font-size:20px;font-weight:700}
+    </style>
+</head>
+<body>
+
+<div class="app" id="app">
+    <div class="header">
+        <div class="header-top">
+            <div class="app-title">Flat<span>Mates</span> 🏠</div>
+            <div class="sync-badge"><div class="sync-dot"></div><span id="sync-text">Cloud Live</span></div>
+        </div>
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="tab" onclick="switchTab('add')">+ Expense</button>
+            <button class="tab" onclick="switchTab('history')">History</button>
+            <button class="tab" onclick="switchTab('settle')">Settle</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div id="tab-dashboard">
+            <div class="bubbles-grid" id="bubbles-grid"></div>
+            <div class="summary-total">
+                <div class="summary-total-label">Total Expenses</div>
+                <div class="summary-total-value" id="total-spent">PKR 0</div>
+            </div>
+            <div class="section-title">Recent Activity</div>
+            <div id="recent-list"></div>
+        </div>
+
+        <div id="tab-add" style="display:none">
+            <div class="form-card"><label class="form-label">Description</label><input class="form-input" id="exp-desc" placeholder="e.g. Dinner" /></div>
+            <div class="form-card"><label class="form-label">Amount (PKR)</label><input class="form-input" id="exp-amount" type="number" placeholder="0" /></div>
+            <div class="form-card">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="exp-category" onchange="toggleCustomCat()">
+                    <option value="food">🍽 Food</option>
+                    <option value="flat">🏠 Flat</option>
+                    <option value="water">💧 Water</option>
+                    <option value="custom">✏️ Custom...</option>
+                </select>
+                <div id="custom-cat-wrap" style="display:none;margin-top:8px"><input class="form-input" id="exp-custom-cat" placeholder="Category name" /></div>
+            </div>
+            <div class="form-card"><label class="form-label">Who participated?</label><div class="people-grid" id="participants-grid"></div></div>
+            <div class="form-card"><label class="form-label">Who paid?</label><div id="payers-list"></div></div>
+            <button class="add-btn" onclick="addExpense()">Add to Cloud</button>
+        </div>
+
+        <div id="tab-history" style="display:none"><div id="history-list"></div></div>
+        <div id="tab-settle" style="display:none"><div class="section-title">Who Owes Whom</div><div class="settle-section" id="settle-list"></div><button class="danger-btn" onclick="confirmErase()">🗑 Reset All Cloud Data</button></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDvhugak_mMKbm8xbGkXtpO_bKE0N7DrNI",
+        authDomain: "flat-mates-39ee8.firebaseapp.com",
+        projectId: "flat-mates-39ee8",
+        storageBucket: "flat-mates-39ee8.firebasestorage.app",
+        messagingSenderId: "219022068136",
+        appId: "1:219022068136:web:8c199c48536e47bf17759d",
+        databaseURL: "https://flat-mates-39ee8-default-rtdb.firebaseio.com"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const dbRef = ref(db, 'expenses_v4');
+
+    window.PEOPLE = [
+        {id:'ali',name:'Ali',initial:'AL'},
+        {id:'mazhar',name:'Mazhar',initial:'MZ'},
+        {id:'numl',name:'Numl',initial:'NU'},
+        {id:'air',name:'Air',initial:'AR'}
+    ];
+
+    window.expenses = [];
+    window.selectedParticipants = new Set(['ali','mazhar','numl','air']);
+
+    onValue(dbRef, (snapshot) => {
+        const data = snapshot.val();
+        window.expenses = data ? Object.values(data) : [];
+        renderAll();
+        document.getElementById('sync-text').textContent = 'Cloud Active';
+    });
+
+    window.addExpense = async function() {
+        const desc = document.getElementById('exp-desc').value.trim();
+        const amount = parseFloat(document.getElementById('exp-amount').value);
+        const category = document.getElementById('exp-category').value;
+        if(!desc || !amount) { showToast('Fill all fields'); return; }
+
+        const payments = window.PEOPLE.map(p=>({
+            person:p.id,
+            amount:parseFloat(document.getElementById('pay-'+p.id)?.value||0)
+        })).filter(p=>p.amount > 0);
+
+        const exp = {
+            id: Date.now().toString(),
+            desc, total: amount, category,
+            participants: [...window.selectedParticipants],
+            payments,
+            date: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        };
+
+        await push(dbRef, exp);
+        showToast('Synced to Cloud!');
+        switchTab('dashboard');
+    };
+
+    window.confirmErase = async function() {
+        if(confirm('Erase EVERYTHING from the Cloud?')) {
+            await remove(dbRef);
+            showToast('Cloud Data Reset');
+        }
+    };
+
+    // Mapping essential functions to window for HTML access
+    window.switchTab = (tab) => {
+        ['dashboard','add','history','settle'].forEach(t => {
+            document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
+        });
+        document.querySelectorAll('.tab').forEach((el, i) => {
+            const tabs=['dashboard','add','history','settle'];
+            el.classList.toggle('active', tabs[i]===tab);
+        });
+        if(tab==='add') buildParticipantsGrid();
+    };
+
+    function renderAll() {
+        const bal = calcBalances();
+        // Render Bubbles
+        document.getElementById('bubbles-grid').innerHTML = window.PEOPLE.map(p => {
+            const b = bal[p.id];
+            const cls = b>0.5?'pos':b<-0.5?'neg':'zero';
+            return `<div class="bubble ${p.id}"><div class="bubble-avatar">${p.initial}</div><div class="bubble-name">${p.name}</div><div class="bubble-balance ${cls}">PKR ${Math.abs(Math.round(b)).toLocaleString()}</div></div>`;
+        }).join('');
+
+        // Render Recent & Total
+        const total = window.expenses.reduce((s,e)=>s+e.total,0);
+        document.getElementById('total-spent').textContent = 'PKR ' + total.toLocaleString();
+        
+        const recent = [...window.expenses].reverse().slice(0,5);
+        document.getElementById('recent-list').innerHTML = recent.map(e => `<div class="expense-item"><div class="exp-header"><div class="exp-desc">${e.desc}</div><div class="exp-amount">PKR ${e.total}</div></div><div class="exp-meta">${e.date}</div></div>`).join('');
+        
+        if(document.getElementById('tab-history').style.display === 'block') renderHistory();
+        if(document.getElementById('tab-settle').style.display === 'block') renderSettle();
+    }
+
+    function calcBalances() {
+        const bal = {}; window.PEOPLE.forEach(p=>bal[p.id]=0);
+        window.expenses.forEach(exp=>{
+            const share = exp.total / exp.participants.length;
+            exp.participants.forEach(pid=> bal[pid] -= share);
+            exp.payments.forEach(pay=> bal[pay.person] += pay.amount);
+        });
+        return bal;
+    }
+
+    function buildParticipantsGrid() {
+        const grid = document.getElementById('participants-grid');
+        grid.innerHTML = window.PEOPLE.map(p=>`<div class="person-chip ${p.id} ${window.selectedParticipants.has(p.id)?'selected':''}" onclick="toggleParticipant('${p.id}')">${p.name}</div>`).join('');
+        updatePayersList();
+    }
+
+    window.toggleParticipant = (pid) => {
+        if(window.selectedParticipants.has(pid)) window.selectedParticipants.delete(pid);
+        else window.selectedParticipants.add(pid);
+        buildParticipantsGrid();
+    };
+
+    function updatePayersList() {
+        document.getElementById('payers-list').innerHTML = window.PEOPLE.map(p=>`<div class="payer-row"><div class="payer-tag ${p.id}">${p.initial}</div><input class="payer-input" id="pay-${p.id}" type="number" placeholder="Paid amount" /></div>`).join('');
+    }
+
+    window.showToast = (msg) => {
+        const t=document.getElementById('toast');
+        t.textContent=msg; t.classList.add('show');
+        setTimeout(()=>t.classList.remove('show'),2500);
+    };
+    
+    renderAll();
+</script>
+
+</body>
+</html>
