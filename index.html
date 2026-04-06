@@ -4,7 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlatMates Cloud Tracker</title>
     <style>
-        /* Sari Styling pehle wali hi hai */
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
         :root{
@@ -40,59 +39,40 @@
         .numl .bubble-avatar{background:var(--numl)}
         .air .bubble-avatar{background:var(--air)}
         .bubble-name{font-size:13px;font-weight:600;margin-bottom:4px}
-        .ali .bubble-name{color:var(--ali-dark)}
-        .mazhar .bubble-name{color:var(--mazhar-dark)}
-        .numl .bubble-name{color:var(--numl-dark)}
-        .air .bubble-name{color:var(--air-dark)}
         .bubble-balance{font-size:20px;font-weight:700;font-family:'Space Mono',monospace}
         .bubble-balance.pos{color:#0a7a50}
         .bubble-balance.neg{color:#c0392b}
         .bubble-balance.zero{color:#999}
-        .bubble-label{font-size:10px;font-weight:500;margin-top:2px}
-        .ali .bubble-label{color:var(--ali)}
-        .mazhar .bubble-label{color:var(--mazhar)}
-        .numl .bubble-label{color:var(--numl)}
-        .air .bubble-label{color:var(--air)}
         .section-title{font-size:13px;font-weight:600;color:var(--text2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
         .form-card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px}
         .form-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;display:block}
-        .form-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border .2s}
-        .form-input:focus{border-color:#999}
-        .form-select{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);outline:none;appearance:none;cursor:pointer}
+        .form-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;background:var(--bg);color:var(--text);outline:none}
+        .form-select{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;background:var(--bg);color:var(--text);outline:none;appearance:none}
         .people-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
         .person-chip{border:2px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;transition:all .15s;background:var(--surface);text-align:center}
         .person-chip.selected.ali{border-color:var(--ali);background:var(--ali-light)}
         .person-chip.selected.mazhar{border-color:var(--mazhar);background:var(--mazhar-light)}
         .person-chip.selected.numl{border-color:var(--numl);background:var(--numl-light)}
         .person-chip.selected.air{border-color:var(--air);background:var(--air-light)}
-        .person-chip-name{font-size:13px;font-weight:600}
-        .person-chip-amt{font-size:11px;color:var(--text2);margin-top:2px}
         .payer-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
         .payer-tag{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
         .payer-tag.ali{background:var(--ali)}
         .payer-tag.mazhar{background:var(--mazhar)}
         .payer-tag.numl{background:var(--numl)}
         .payer-tag.air{background:var(--air)}
-        .payer-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);outline:none}
-        .add-btn{width:100%;padding:14px;border:none;border-radius:12px;background:var(--text);color:#fff;font-size:15px;font-weight:600;font-family:'Sora',sans-serif;cursor:pointer;margin-top:8px;transition:opacity .15s}
+        .payer-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;background:var(--bg);outline:none}
+        .add-btn{width:100%;padding:14px;border:none;border-radius:12px;background:var(--text);color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px}
         .expense-item{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
         .exp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
         .exp-desc{font-size:14px;font-weight:600}
         .exp-amount{font-size:16px;font-weight:700;font-family:'Space Mono',monospace}
         .exp-meta{font-size:11px;color:var(--text2);margin-bottom:8px}
-        .cat-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;margin-right:6px}
-        .cat-food{background:#fde8e4;color:#8a2d1c}
-        .cat-flat{background:#d9edfa;color:#0c3f6e}
-        .cat-water{background:#d8f4ec;color:#065040}
-        .cat-other{background:#f0ece8;color:#5a4a3a}
-        .cat-custom{background:#ece7fd;color:#3a2480}
         .exp-splits{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
         .split-tag{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500}
         .split-tag.ali{background:var(--ali-light);color:var(--ali-dark)}
         .split-tag.mazhar{background:var(--mazhar-light);color:var(--mazhar-dark)}
         .split-tag.numl{background:var(--numl-light);color:var(--numl-dark)}
         .split-tag.air{background:var(--air-light);color:var(--air-dark)}
-        .delete-btn{background:none;border:none;cursor:pointer;color:#ccc;font-size:16px;padding:2px}
         .settle-section{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px}
         .settle-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
         .settle-amount{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#c0392b}
@@ -135,13 +115,12 @@
             <div class="form-card"><label class="form-label">Amount (PKR)</label><input class="form-input" id="exp-amount" type="number" placeholder="0" /></div>
             <div class="form-card">
                 <label class="form-label">Category</label>
-                <select class="form-select" id="exp-category" onchange="toggleCustomCat()">
-                    <option value="food">🍽 Food</option>
+                <select class="form-select" id="exp-category">
+                    <option value="food">🍱 Food</option>
                     <option value="flat">🏠 Flat</option>
                     <option value="water">💧 Water</option>
-                    <option value="custom">✏️ Custom...</option>
+                    <option value="other">🛠️ Other</option>
                 </select>
-                <div id="custom-cat-wrap" style="display:none;margin-top:8px"><input class="form-input" id="exp-custom-cat" placeholder="Category name" /></div>
             </div>
             <div class="form-card"><label class="form-label">Who participated?</label><div class="people-grid" id="participants-grid"></div></div>
             <div class="form-card"><label class="form-label">Who paid?</label><div id="payers-list"></div></div>
@@ -149,7 +128,7 @@
         </div>
 
         <div id="tab-history" style="display:none"><div id="history-list"></div></div>
-        <div id="tab-settle" style="display:none"><div class="section-title">Who Owes Whom</div><div class="settle-section" id="settle-list"></div><button class="danger-btn" onclick="confirmErase()">🗑 Reset All Cloud Data</button></div>
+        <div id="tab-settle" style="display:none"><div class="section-title">Who Owes Whom</div><div class="settle-section" id="settle-list"></div><button class="danger-btn" onclick="confirmErase()">⚠️ Reset All Cloud Data</button></div>
     </div>
 </div>
 
@@ -222,7 +201,6 @@
         }
     };
 
-    // Mapping essential functions to window for HTML access
     window.switchTab = (tab) => {
         ['dashboard','add','history','settle'].forEach(t => {
             document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
@@ -231,27 +209,64 @@
             const tabs=['dashboard','add','history','settle'];
             el.classList.toggle('active', tabs[i]===tab);
         });
+        renderAll();
         if(tab==='add') buildParticipantsGrid();
     };
 
     function renderAll() {
         const bal = calcBalances();
-        // Render Bubbles
         document.getElementById('bubbles-grid').innerHTML = window.PEOPLE.map(p => {
             const b = bal[p.id];
             const cls = b>0.5?'pos':b<-0.5?'neg':'zero';
             return `<div class="bubble ${p.id}"><div class="bubble-avatar">${p.initial}</div><div class="bubble-name">${p.name}</div><div class="bubble-balance ${cls}">PKR ${Math.abs(Math.round(b)).toLocaleString()}</div></div>`;
         }).join('');
 
-        // Render Recent & Total
         const total = window.expenses.reduce((s,e)=>s+e.total,0);
         document.getElementById('total-spent').textContent = 'PKR ' + total.toLocaleString();
         
         const recent = [...window.expenses].reverse().slice(0,5);
-        document.getElementById('recent-list').innerHTML = recent.map(e => `<div class="expense-item"><div class="exp-header"><div class="exp-desc">${e.desc}</div><div class="exp-amount">PKR ${e.total}</div></div><div class="exp-meta">${e.date}</div></div>`).join('');
+        document.getElementById('recent-list').innerHTML = recent.map(e => `<div class="expense-item"><div class="exp-header"><div class="exp-desc">${e.desc}</div><div class="exp-amount">PKR ${e.total.toLocaleString()}</div></div><div class="exp-meta">${e.date}</div></div>`).join('');
         
-        if(document.getElementById('tab-history').style.display === 'block') renderHistory();
-        if(document.getElementById('tab-settle').style.display === 'block') renderSettle();
+        renderHistory();
+        renderSettle();
+    }
+
+    function renderHistory() {
+        const hist = document.getElementById('history-list');
+        if(!hist) return;
+        hist.innerHTML = [...window.expenses].reverse().map(e => `
+            <div class="expense-item">
+                <div class="exp-header">
+                    <div class="exp-desc">${e.desc}</div>
+                    <div class="exp-amount">PKR ${e.total.toLocaleString()}</div>
+                </div>
+                <div class="exp-meta">${e.date} at ${e.time} | Cat: ${e.category}</div>
+                <div class="exp-splits">
+                    ${e.participants.map(p => `<span class="split-tag ${p}">${p.toUpperCase()}</span>`).join('')}
+                </div>
+            </div>
+        `).join('') || '<p style="text-align:center;padding:20px;color:#999">No expenses yet.</p>';
+    }
+
+    function renderSettle() {
+        const bal = calcBalances();
+        const creditors = [], debtors = [];
+        for (let p in bal) {
+            if (bal[p] > 1) creditors.push({id: p, amt: bal[p]});
+            else if (bal[p] < -1) debtors.push({id: p, amt: Math.abs(bal[p])});
+        }
+        
+        let html = '';
+        debtors.forEach(d => {
+            creditors.forEach(c => {
+                if (d.amt > 0 && c.amt > 0) {
+                    const pay = Math.min(d.amt, c.amt);
+                    html += `<div class="settle-item"><div><strong>${d.id.toUpperCase()}</strong> owes <strong>${c.id.toUpperCase()}</strong></div><div class="settle-amount">PKR ${Math.round(pay).toLocaleString()}</div></div>`;
+                    d.amt -= pay; c.amt -= pay;
+                }
+            });
+        });
+        document.getElementById('settle-list').innerHTML = html || '<p style="text-align:center;padding:20px;color:#999">Everyone is settled up!</p>';
     }
 
     function calcBalances() {
@@ -288,6 +303,5 @@
     
     renderAll();
 </script>
-
 </body>
 </html>
